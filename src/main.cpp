@@ -1,9 +1,11 @@
 #include <iostream>
 
-#include "cpu/cpu.hpp"
+#include "emulator.hpp"
+
+using namespace emulator;
 
 int main() {
-    Cpu cpu;
+    Emulator emulator;
 
     std::cout << "Hello, World!" << std::endl;
     return 0;
