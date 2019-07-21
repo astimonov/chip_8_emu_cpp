@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <array>
+#include <vector>
 #include <memory>
 #include <string>
 
@@ -10,8 +11,9 @@ namespace emulator {
     class Rom {
     public:
         explicit Rom(std::string filename);
+        std::vector<uint8_t> GetData();
     private:
-
+        std::vector<uint8_t> m_data;
     };
 }
 
