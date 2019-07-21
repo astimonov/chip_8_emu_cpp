@@ -8,8 +8,8 @@
 
 namespace emulator {
     class Rom {
-        explicit Rom(std::string filename);
     public:
+        explicit Rom(std::string filename);
     private:
 
     };
