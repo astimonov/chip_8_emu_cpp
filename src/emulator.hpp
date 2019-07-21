@@ -7,6 +7,7 @@
 #include "ram.hpp"
 #include "cpu.hpp"
 #include "rom.hpp"
+#include "input.hpp"
 
 namespace emulator {
     class Emulator {
@@ -17,6 +18,7 @@ namespace emulator {
         std::unique_ptr<Cpu> m_cpu;
         std::shared_ptr<Ram> m_ram;
         Rom m_rom;
+        Input m_input;
     };
 }
 
