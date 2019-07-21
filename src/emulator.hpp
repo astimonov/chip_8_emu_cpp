@@ -13,6 +13,7 @@ namespace emulator {
     public:
         explicit Emulator(Rom rom);
     private:
+        static constexpr uint16_t PC_START = 0x200;
         std::unique_ptr<Cpu> m_cpu;
         std::shared_ptr<Ram> m_ram;
         Rom m_rom;
