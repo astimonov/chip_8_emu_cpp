@@ -2,6 +2,7 @@
 #include <functional>
 
 #include "cpu.hpp"
+#include "exceptions.hpp"
 
 using namespace emulator;
 
@@ -21,6 +22,10 @@ void Cpu::Reset() {
     this->m_reg_sp = AUX_REGISTER_RESET_VALUE;
 }
 
+void Cpu::RunInstruction() {
+    this->Decode(this->m_ram->Read16(this->m_reg_pc));
+}
+
 void Cpu::Decode(uint16_t opcode) {
     std::map<uint16_t, std::function<void()>> opcode_handlers = {
         {
@@ -29,6 +34,11 @@ void Cpu::Decode(uint16_t opcode) {
             }
         }
     };
+
+    if (opcode_handlers.find(opcode) == opcode_handlers.end())
+    {
+        throw RuntimeException(this->m_reg_pc, opcode);
+    }
 
     opcode_handlers[opcode]();
 }

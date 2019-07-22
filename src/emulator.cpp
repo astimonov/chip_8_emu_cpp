@@ -10,3 +10,7 @@ Emulator::Emulator(Rom rom) : m_rom(rom) {
     this->m_cpu->Reset();
     this->m_cpu->SetRegPC(PC_START);
 }
+
+void Emulator::Run() {
+    this->m_cpu->RunInstruction();
+}

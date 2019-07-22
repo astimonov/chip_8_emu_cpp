@@ -13,6 +13,7 @@ namespace emulator {
         explicit Cpu(const std::shared_ptr<Ram>& ram);
         void SetRegPC(uint16_t pc);
         void Reset();
+        void RunInstruction();
     private:
         void Decode(uint16_t opcode);
         static constexpr int STACK_DEPTH = 16;
