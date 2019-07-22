@@ -6,7 +6,7 @@
 
 using namespace emulator;
 
-static constexpr std::string_view ROM_FILENAME {"roms/INVADERS"};
+static constexpr std::string_view ROM_FILENAME {"../roms/INVADERS"};
 
 int main() {
     Rom rom {std::string(ROM_FILENAME)};
