@@ -9,9 +9,15 @@ using namespace emulator;
 static constexpr std::string_view ROM_FILENAME {"../roms/INVADERS"};
 
 int main() {
-    Rom rom {std::string(ROM_FILENAME)};
-    Emulator emulator_instance {rom};
+    try {
+        Rom rom{std::string(ROM_FILENAME)};
+        Emulator emulator_instance{rom};
 
-    std::cout << "Hello, World!" << std::endl;
+        std::cout << "Emulator created!" << std::endl;
+    } catch (...) {
+        // TODO: Proper exception handling
+        std::cout << "Error!" << std::endl;
+    }
+
     return 0;
 }
