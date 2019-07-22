@@ -1,3 +1,6 @@
+#include <map>
+#include <functional>
+
 #include "cpu.hpp"
 
 using namespace emulator;
@@ -16,4 +19,16 @@ void Cpu::Reset() {
     this->m_reg_i = AUX_REGISTER_RESET_VALUE;
     this->m_reg_pc = AUX_REGISTER_RESET_VALUE;
     this->m_reg_sp = AUX_REGISTER_RESET_VALUE;
+}
+
+void Cpu::Decode(uint16_t opcode) {
+    std::map<uint16_t, std::function<void()>> opcode_handlers = {
+        {
+            0x0000, [&opcode]() {
+
+            }
+        }
+    };
+
+    opcode_handlers[opcode]();
 }

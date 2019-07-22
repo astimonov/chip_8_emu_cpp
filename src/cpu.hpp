@@ -14,6 +14,7 @@ namespace emulator {
         void SetRegPC(uint16_t pc);
         void Reset();
     private:
+        void Decode(uint16_t opcode);
         static constexpr int STACK_DEPTH = 16;
         static constexpr uint16_t STACK_RESET_VALUE = 0x0000;
         static constexpr int GP_REGISTERS_QTY = 16;
