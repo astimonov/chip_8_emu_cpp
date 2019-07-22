@@ -3,6 +3,7 @@
 
 #include "emulator.hpp"
 #include "rom.hpp"
+#include "exceptions.hpp"
 
 using namespace emulator;
 
@@ -12,11 +13,11 @@ int main() {
     try {
         Rom rom{std::string(ROM_FILENAME)};
         Emulator emulator_instance{rom};
-
-        std::cout << "Emulator created!" << std::endl;
-    } catch (...) {
-        // TODO: Proper exception handling
-        std::cout << "Error!" << std::endl;
+    } catch (RuntimeException& e) {
+        std::cout << e.what()
+                  << " PC = 0x" << std::hex << e.GetPc()
+                  << " (0x" << e.GetOpcode()
+                  << ")\n";
     }
 
     return 0;
