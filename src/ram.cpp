@@ -33,3 +33,7 @@ uint16_t Ram::Read16(uint16_t address) {
 
     return this->m_memory[address] << 8 | this->m_memory[address + 1];
 }
+
+void Ram::WriteMultiple(std::vector<uint8_t>&& data, uint16_t address) {
+    std::copy(data.begin(), data.end(), this->m_memory.begin() + address);
+}
