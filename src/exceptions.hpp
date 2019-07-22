@@ -9,7 +9,7 @@ namespace emulator {
     public:
         RuntimeException(uint16_t pc, uint16_t opcode);
         const char* what() const noexcept;
-        uint16_t GetPc();
+        uint16_t GetPC();
         uint16_t GetOpcode();
     private:
         const char * m_message;

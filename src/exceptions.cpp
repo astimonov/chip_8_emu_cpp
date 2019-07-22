@@ -10,7 +10,7 @@ const char *emulator::RuntimeException::what() const noexcept {
     return this->m_message;
 }
 
-uint16_t emulator::RuntimeException::GetPc() {
+uint16_t emulator::RuntimeException::GetPC() {
     return this->m_pc;
 }
 
