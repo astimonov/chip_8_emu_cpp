@@ -13,6 +13,7 @@ int main() {
     try {
         Rom rom{std::string(ROM_FILENAME)};
         Emulator emulator_instance{rom};
+        emulator_instance.Run();
     } catch (RuntimeException& e) {
         std::cout << e.what()
                   << " PC = 0x" << std::hex << e.GetPc()
