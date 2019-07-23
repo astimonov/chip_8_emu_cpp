@@ -1,3 +1,6 @@
+#include <thread>
+#include <chrono>
+
 #include "emulator.hpp"
 #include "rom.hpp"
 
@@ -12,5 +15,8 @@ Emulator::Emulator(Rom rom) : m_rom(rom) {
 }
 
 void Emulator::Run() {
-    this->m_cpu->RunInstruction();
+    while (true) {
+        this->m_cpu->RunInstruction();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
 }
