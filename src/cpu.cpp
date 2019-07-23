@@ -101,7 +101,8 @@ void Cpu::Instruction00EE(uint16_t opcode) {
 }
 
 void Cpu::Instruction1NNN(uint16_t opcode) {
-
+    uint16_t new_pc = opcode & 0x0FFF;
+    this->SetRegPC(new_pc);
 }
 
 void Cpu::Instruction2NNN(uint16_t opcode) {
