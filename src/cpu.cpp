@@ -62,8 +62,25 @@ void Cpu::Decode(uint16_t opcode) {
         { 0xF033, [this] (uint16_t opcode) { this->InstructionFX33(opcode); } },
     };
 
-    if (opcode_handlers.find(opcode) == opcode_handlers.end())
-    {
+    uint16_t opcode_xxxx = opcode;
+    uint16_t opcode_x000 = opcode & 0xF000;
+    uint16_t opcode_x00x = opcode & 0xF00F;
+    uint16_t opcode_x0xx = opcode & 0xF0FF;
+
+    auto handler_x0xx = opcode_handlers.find(opcode_x0xx);
+    auto handler_x00x = opcode_handlers.find(opcode_x00x);
+    auto handler_x000 = opcode_handlers.find(opcode_x000);
+    auto handler_xxxx = opcode_handlers.find(opcode_xxxx);
+
+    if (handler_x0xx != opcode_handlers.end()) {
+        handler_x0xx->second(opcode);
+    } else if (handler_x00x != opcode_handlers.end()) {
+        handler_x00x->second(opcode);
+    } else if (handler_x000 != opcode_handlers.end()) {
+        handler_x000->second(opcode);
+    }else if (handler_xxxx != opcode_handlers.end()) {
+        handler_xxxx->second(opcode);
+    } else {
         throw RuntimeException(this->m_reg_pc, opcode);
     }
 
