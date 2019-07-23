@@ -29,6 +29,10 @@ int main() {
                   << " PC = 0x" << std::hex << e.GetPC()
                   << " , address = " << e.GetAddress()
                   << '\n';
+    } catch (StackOverflow& e) {
+        std::cout << e.what()
+                  << " PC = 0x" << std::hex << e.GetPC()
+                  << '\n';
     }
 
     return 0;

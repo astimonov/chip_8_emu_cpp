@@ -39,3 +39,7 @@ emulator::LoadAccessFailed::LoadAccessFailed(uint16_t pc, uint16_t address)
 uint16_t emulator::LoadAccessFailed::GetAddress() {
     return this->m_address;
 }
+
+emulator::StackOverflow::StackOverflow(uint16_t pc) : RuntimeException(pc) {
+
+}
