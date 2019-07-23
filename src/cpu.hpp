@@ -28,6 +28,7 @@ namespace emulator {
         uint16_t m_reg_sp;
         const std::shared_ptr<Ram>& m_ram;
 
+        void Instruction0NNN(uint16_t opcode);
         void Instruction00E0(uint16_t opcode);
         void Instruction00EE(uint16_t opcode);
         void Instruction1NNN(uint16_t opcode);

@@ -28,6 +28,7 @@ void Cpu::RunInstruction() {
 
 void Cpu::Decode(uint16_t opcode) {
     std::map<uint16_t, const std::function<void(uint16_t)>> opcode_handlers = {
+        { 0x0000, [this] (uint16_t opcode) { this->Instruction0NNN(opcode); } },
         { 0x00E0, [this] (uint16_t opcode) { this->Instruction00E0(opcode); } },
         { 0x00EE, [this] (uint16_t opcode) { this->Instruction00EE(opcode); } },
         { 0x1000, [this] (uint16_t opcode) { this->Instruction1NNN(opcode); } },
@@ -78,13 +79,17 @@ void Cpu::Decode(uint16_t opcode) {
         handler_x00x->second(opcode);
     } else if (handler_x000 != opcode_handlers.end()) {
         handler_x000->second(opcode);
-    }else if (handler_xxxx != opcode_handlers.end()) {
+    } else if (handler_xxxx != opcode_handlers.end()) {
         handler_xxxx->second(opcode);
     } else {
         throw RuntimeException(this->m_reg_pc, opcode);
     }
 
     this->m_reg_pc += 2;
+}
+
+void Cpu::Instruction0NNN(uint16_t opcode) {
+
 }
 
 void Cpu::Instruction00E0(uint16_t opcode) {
