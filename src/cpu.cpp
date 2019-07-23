@@ -27,12 +27,39 @@ void Cpu::RunInstruction() {
 }
 
 void Cpu::Decode(uint16_t opcode) {
-    std::map<uint16_t, std::function<void()>> opcode_handlers = {
-        {
-            0x0000, [&opcode]() {
-
-            }
-        }
+    std::map<uint16_t, const std::function<void(uint16_t)>> opcode_handlers = {
+        { 0x00E0, [this] (uint16_t opcode) { this->Instruction00E0(opcode); } },
+        { 0x00EE, [this] (uint16_t opcode) { this->Instruction00EE(opcode); } },
+        { 0x1000, [this] (uint16_t opcode) { this->Instruction1NNN(opcode); } },
+        { 0x2000, [this] (uint16_t opcode) { this->Instruction2NNN(opcode); } },
+        { 0x3000, [this] (uint16_t opcode) { this->Instruction3XNN(opcode); } },
+        { 0x4000, [this] (uint16_t opcode) { this->Instruction4XNN(opcode); } },
+        { 0x5000, [this] (uint16_t opcode) { this->Instruction5XY0(opcode); } },
+        { 0x6000, [this] (uint16_t opcode) { this->Instruction6XNN(opcode); } },
+        { 0x7000, [this] (uint16_t opcode) { this->Instruction7XNN(opcode); } },
+        { 0x8000, [this] (uint16_t opcode) { this->Instruction8XY0(opcode); } },
+        { 0x8001, [this] (uint16_t opcode) { this->Instruction8XY1(opcode); } },
+        { 0x8002, [this] (uint16_t opcode) { this->Instruction8XY2(opcode); } },
+        { 0x8003, [this] (uint16_t opcode) { this->Instruction8XY3(opcode); } },
+        { 0x8004, [this] (uint16_t opcode) { this->Instruction8XY4(opcode); } },
+        { 0x8005, [this] (uint16_t opcode) { this->Instruction8XY5(opcode); } },
+        { 0x8006, [this] (uint16_t opcode) { this->Instruction8XY6(opcode); } },
+        { 0x8007, [this] (uint16_t opcode) { this->Instruction8XY7(opcode); } },
+        { 0x800E, [this] (uint16_t opcode) { this->Instruction8XYE(opcode); } },
+        { 0x9000, [this] (uint16_t opcode) { this->Instruction9XY0(opcode); } },
+        { 0xA000, [this] (uint16_t opcode) { this->InstructionANNN(opcode); } },
+        { 0xB000, [this] (uint16_t opcode) { this->InstructionBNNN(opcode); } },
+        { 0xC000, [this] (uint16_t opcode) { this->InstructionCXNN(opcode); } },
+        { 0xD000, [this] (uint16_t opcode) { this->InstructionDXYN(opcode); } },
+        { 0xE09E, [this] (uint16_t opcode) { this->InstructionEX9E(opcode); } },
+        { 0xE0A1, [this] (uint16_t opcode) { this->InstructionEXA1(opcode); } },
+        { 0xF007, [this] (uint16_t opcode) { this->InstructionFX07(opcode); } },
+        { 0xF00A, [this] (uint16_t opcode) { this->InstructionFX0A(opcode); } },
+        { 0xF015, [this] (uint16_t opcode) { this->InstructionFX15(opcode); } },
+        { 0xF018, [this] (uint16_t opcode) { this->InstructionFX18(opcode); } },
+        { 0xF01E, [this] (uint16_t opcode) { this->InstructionFX1E(opcode); } },
+        { 0xF029, [this] (uint16_t opcode) { this->InstructionFX29(opcode); } },
+        { 0xF033, [this] (uint16_t opcode) { this->InstructionFX33(opcode); } },
     };
 
     if (opcode_handlers.find(opcode) == opcode_handlers.end())
