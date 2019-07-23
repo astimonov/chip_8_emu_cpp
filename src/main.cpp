@@ -11,8 +11,8 @@ static constexpr std::string_view ROM_FILENAME {"../roms/INVADERS"};
 
 int main() {
     try {
-        Rom rom{std::string(ROM_FILENAME)};
-        Emulator emulator_instance{rom};
+        Rom rom {std::string(ROM_FILENAME)};
+        Emulator emulator_instance {std::move(rom)};
         emulator_instance.Run();
     } catch (IllegalInstruction& e) {
         std::cout << e.what()
