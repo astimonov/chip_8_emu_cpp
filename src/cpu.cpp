@@ -67,5 +67,133 @@ void Cpu::Decode(uint16_t opcode) {
         throw RuntimeException(this->m_reg_pc, opcode);
     }
 
-    opcode_handlers[opcode]();
+    this->m_reg_pc += 2;
+}
+
+void Cpu::Instruction00E0(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction00EE(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction1NNN(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction2NNN(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction3XNN(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction4XNN(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction5XY0(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction6XNN(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction7XNN(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction8XY0(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction8XY1(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction8XY2(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction8XY3(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction8XY4(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction8XY5(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction8XY6(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction8XY7(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction8XYE(uint16_t opcode) {
+
+}
+
+void Cpu::Instruction9XY0(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionANNN(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionBNNN(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionCXNN(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionDXYN(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionEX9E(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionEXA1(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionFX07(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionFX0A(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionFX15(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionFX18(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionFX1E(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionFX29(uint16_t opcode) {
+
+}
+
+void Cpu::InstructionFX33(uint16_t opcode) {
+
 }
