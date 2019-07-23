@@ -82,7 +82,7 @@ void Cpu::Decode(uint16_t opcode) {
     } else if (handler_xxxx != opcode_handlers.end()) {
         handler_xxxx->second(opcode);
     } else {
-        throw RuntimeException(this->m_reg_pc, opcode);
+        throw IllegalInstruction(this->m_reg_pc, opcode);
     }
 
     this->m_reg_pc += 2;
