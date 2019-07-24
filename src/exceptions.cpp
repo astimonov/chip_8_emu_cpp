@@ -41,5 +41,9 @@ uint16_t emulator::LoadAccessFailed::GetAddress() {
 }
 
 emulator::StackOverflow::StackOverflow(uint16_t pc) : RuntimeException(pc) {
+    this->m_message = "Stack overflow";
+}
 
+emulator::StackUnderflow::StackUnderflow(uint16_t pc) : RuntimeException(pc) {
+    this->m_message = "Stack underflow";
 }

@@ -33,6 +33,10 @@ int main() {
         std::cout << e.what()
                   << " PC = 0x" << std::hex << e.GetPC()
                   << '\n';
+    } catch (StackUnderflow& e) {
+        std::cout << e.what()
+                  << " PC = 0x" << std::hex << e.GetPC()
+                  << '\n';
     }
 
     return 0;

@@ -45,6 +45,11 @@ namespace emulator {
         StackOverflow(uint16_t pc);
     private:
     };
+    class StackUnderflow : public RuntimeException {
+    public:
+        StackUnderflow(uint16_t pc);
+    private:
+    };
 }
 
 
