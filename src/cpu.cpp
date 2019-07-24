@@ -16,10 +16,12 @@ void Cpu::SetRegPC(uint16_t pc) {
 
 void Cpu::Reset() {
     std::fill(this->m_reg_v.begin(), this->m_reg_v.end(), GP_REGISTER_RESET_VALUE);
-    std::fill(this->m_stack.begin(), this->m_stack.end(), STACK_RESET_VALUE);
     this->m_reg_i = AUX_REGISTER_RESET_VALUE;
     this->m_reg_pc = AUX_REGISTER_RESET_VALUE;
-    this->m_reg_sp = AUX_REGISTER_RESET_VALUE;
+
+    if (!this->m_stack.empty()) {
+        this->m_stack = {};
+    }
 }
 
 void Cpu::RunInstruction() {
@@ -229,6 +231,24 @@ uint16_t Cpu::GetRegPC() {
     return this->m_reg_pc;
 }
 
+void Cpu::StackPush(uint16_t value) {
+    if (this->m_stack.size() >= this->STACK_DEPTH) {
+        throw StackOverflow(this->GetRegPC());
+    }
+
+    this->m_stack.push(value);
+}
+
+uint16_t Cpu::StackPop() {
+    if (this->m_stack.empty()) {
+        throw StackUnderflow(this->GetRegPC());
+    }
+
+    uint16_t stackTop = this->m_stack.top();
+    this->m_stack.pop();
+
+    return stackTop;
+}
 
 void Cpu::SetRegV(int index, uint8_t value) {
     if (index < 0 || index >= GP_REGISTERS_QTY) {
