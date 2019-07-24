@@ -70,19 +70,13 @@ void Cpu::Decode(uint16_t opcode) {
     uint16_t opcode_x00x = opcode & 0xF00F;
     uint16_t opcode_x0xx = opcode & 0xF0FF;
 
-    auto handler_x0xx = opcode_handlers.find(opcode_x0xx);
-    auto handler_x00x = opcode_handlers.find(opcode_x00x);
-    auto handler_x000 = opcode_handlers.find(opcode_x000);
-    auto handler_xxxx = opcode_handlers.find(opcode_xxxx);
+    auto handler = opcode_handlers.find(opcode_x0xx);
 
-    if (handler_x0xx != opcode_handlers.end()) {
-        handler_x0xx->second(opcode);
-    } else if (handler_x00x != opcode_handlers.end()) {
-        handler_x00x->second(opcode);
-    } else if (handler_x000 != opcode_handlers.end()) {
-        handler_x000->second(opcode);
-    } else if (handler_xxxx != opcode_handlers.end()) {
-        handler_xxxx->second(opcode);
+    if ((handler != opcode_handlers.end())
+            || ((handler = opcode_handlers.find(opcode_x00x)) != opcode_handlers.end())
+            || ((handler = opcode_handlers.find(opcode_x000)) != opcode_handlers.end())
+            || ((handler = opcode_handlers.find(opcode_xxxx)) != opcode_handlers.end())) {
+        handler->second(opcode);
     } else {
         throw IllegalInstruction(this->m_reg_pc, opcode);
     }
