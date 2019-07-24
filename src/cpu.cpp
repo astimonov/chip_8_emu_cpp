@@ -85,15 +85,17 @@ void Cpu::Decode(uint16_t opcode) {
 }
 
 void Cpu::Instruction0NNN(uint16_t opcode) {
-
+    // Unimplemented
+    this->AdvancePC();
 }
 
 void Cpu::Instruction00E0(uint16_t opcode) {
-
+    // Clear the screen
+    this->AdvancePC();
 }
 
 void Cpu::Instruction00EE(uint16_t opcode) {
-
+    this->SetRegPC(this->StackPop());
 }
 
 void Cpu::Instruction1NNN(uint16_t opcode) {
@@ -102,75 +104,140 @@ void Cpu::Instruction1NNN(uint16_t opcode) {
 }
 
 void Cpu::Instruction2NNN(uint16_t opcode) {
-
+    this->StackPush(this->GetRegPC());
+    uint16_t new_pc = opcode & 0x0FFF;
+    this->SetRegPC(new_pc);
 }
 
 void Cpu::Instruction3XNN(uint16_t opcode) {
-
+    uint16_t value = opcode & 0x00FF;
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    if (value == this->GetRegV(regX)) {
+        this->AdvancePC(4);
+    } else {
+        this->AdvancePC();
+    }
 }
 
 void Cpu::Instruction4XNN(uint16_t opcode) {
-
+    int16_t value = opcode & 0x00FF;
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    if (value != this->GetRegV(regX)) {
+        this->AdvancePC(4);
+    } else {
+        this->AdvancePC();
+    }
 }
 
 void Cpu::Instruction5XY0(uint16_t opcode) {
-
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t regY = (opcode & 0x00F0) >> 4;
+    if (this->GetRegV(regX) == this->GetRegV(regY)) {
+        this->AdvancePC(4);
+    } else {
+        this->AdvancePC();
+    }
 }
 
 void Cpu::Instruction6XNN(uint16_t opcode) {
-
+    uint16_t value = opcode & 0x00FF;
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    this->SetRegV(regX, value);
+    this->AdvancePC();
 }
 
 void Cpu::Instruction7XNN(uint16_t opcode) {
-
+    uint16_t value = opcode & 0x00FF;
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    this->SetRegV(regX, this->GetRegV(regX) + value);
+    this->AdvancePC();
 }
 
 void Cpu::Instruction8XY0(uint16_t opcode) {
-
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t regY = (opcode & 0x00F0) >> 4;
+    this->SetRegV(regX, this->GetRegV(regY));
+    this->AdvancePC();
 }
 
 void Cpu::Instruction8XY1(uint16_t opcode) {
-
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t regY = (opcode & 0x00F0) >> 4;
+    this->SetRegV(regX, this->GetRegV(regX) | this->GetRegV(regY));
+    this->AdvancePC();
 }
 
 void Cpu::Instruction8XY2(uint16_t opcode) {
-
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t regY = (opcode & 0x00F0) >> 4;
+    this->SetRegV(regX, this->GetRegV(regX) & this->GetRegV(regY));
+    this->AdvancePC();
 }
 
 void Cpu::Instruction8XY3(uint16_t opcode) {
-
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t regY = (opcode & 0x00F0) >> 4;
+    this->SetRegV(regX, this->GetRegV(regX) ^ this->GetRegV(regY));
+    this->AdvancePC();
 }
 
 void Cpu::Instruction8XY4(uint16_t opcode) {
-
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t regY = (opcode & 0x00F0) >> 4;
+    this->SetRegV(regX, this->GetRegV(regX) + this->GetRegV(regY));
+    this->SetFlag(this->GetRegV(regX) < this->GetRegV(regY));
+    this->AdvancePC();
 }
 
 void Cpu::Instruction8XY5(uint16_t opcode) {
-
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t regY = (opcode & 0x00F0) >> 4;
+    this->SetFlag(this->GetRegV(regY) > this->GetRegV(regX));
+    this->SetRegV(regX, this->GetRegV(regX) - this->GetRegV(regY));
+    this->AdvancePC();
 }
 
 void Cpu::Instruction8XY6(uint16_t opcode) {
-
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    this->SetFlag(this->GetRegV(regX) & 0x0001);
+    this->SetRegV(regX, this->GetRegV(regX) >> 1);
+    this->AdvancePC();
 }
 
 void Cpu::Instruction8XY7(uint16_t opcode) {
-
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t regY = (opcode & 0x00F0) >> 4;
+    this->SetFlag(this->GetRegV(regX) > this->GetRegV(regY));
+    this->SetRegV(regX, this->GetRegV(regY) - this->GetRegV(regX));
+    this->AdvancePC();
 }
 
 void Cpu::Instruction8XYE(uint16_t opcode) {
-
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    this->SetFlag(this->GetRegV(regX) & 0x8000);
+    this->SetRegV(regX, this->GetRegV(regX) << 1);
+    this->AdvancePC();
 }
 
 void Cpu::Instruction9XY0(uint16_t opcode) {
-
+    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t regY = (opcode & 0x00F0) >> 4;
+    if (this->GetRegV(regX) != this->GetRegV(regY)) {
+        this->AdvancePC(4);
+    } else {
+        this->AdvancePC();
+    }
 }
 
 void Cpu::InstructionANNN(uint16_t opcode) {
-
+    uint16_t value = opcode & 0x0FFF;
+    this->SetRegI(value);
+    this->AdvancePC();
 }
 
 void Cpu::InstructionBNNN(uint16_t opcode) {
-
+    uint16_t value = opcode & 0x0FFF;
+    this->SetRegPC(this->GetRegV(0) + value);
 }
 
 void Cpu::InstructionCXNN(uint16_t opcode) {
