@@ -220,3 +220,42 @@ void Cpu::InstructionFX29(uint16_t opcode) {
 void Cpu::InstructionFX33(uint16_t opcode) {
 
 }
+
+void Cpu::AdvancePC(uint16_t addressToAdvance) {
+    this->m_reg_pc += addressToAdvance;
+}
+
+uint16_t Cpu::GetRegPC() {
+    return this->m_reg_pc;
+}
+
+
+void Cpu::SetRegV(int index, uint8_t value) {
+    if (index < 0 || index >= GP_REGISTERS_QTY) {
+        throw IllegalInstruction(
+                this->GetRegPC(), this->m_ram->Read16(this->GetRegPC()));
+    }
+
+    this->m_reg_v[index] = value;
+}
+
+uint8_t Cpu::GetRegV(int index) {
+    if (index < 0 || index >= GP_REGISTERS_QTY) {
+        throw IllegalInstruction(
+                this->GetRegPC(), this->m_ram->Read16(this->GetRegPC()));
+    }
+
+    return this->m_reg_v[index];
+}
+
+void Cpu::SetRegI(uint16_t value) {
+    this->m_reg_i = value;
+}
+
+uint16_t Cpu::GetRegI() {
+    return this->m_reg_i;
+}
+
+void Cpu::SetFlag(bool value) {
+    this->SetRegV(0xF, value);
+}

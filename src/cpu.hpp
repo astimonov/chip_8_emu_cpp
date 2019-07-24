@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <array>
+#include <stack>
 #include <memory>
 
 #include "ram.hpp"
@@ -17,15 +18,15 @@ namespace emulator {
     private:
         void Decode(uint16_t opcode);
         static constexpr int STACK_DEPTH = 16;
-        static constexpr uint16_t STACK_RESET_VALUE = 0x0000;
         static constexpr int GP_REGISTERS_QTY = 16;
         static constexpr uint8_t GP_REGISTER_RESET_VALUE = 0x00;
         static constexpr uint8_t AUX_REGISTER_RESET_VALUE = 0x00;
-        std::array<uint16_t, STACK_DEPTH> m_stack;
+        static constexpr uint16_t PC_ADVANCE_STEP = 2;
         std::array<uint8_t, GP_REGISTERS_QTY> m_reg_v;
+        std::stack<uint16_t> m_stack;
         uint16_t m_reg_i;
         uint16_t m_reg_pc;
-        uint16_t m_reg_sp;
+
         const std::shared_ptr<Ram>& m_ram;
 
         void Instruction0NNN(uint16_t opcode);
@@ -61,6 +62,16 @@ namespace emulator {
         void InstructionFX1E(uint16_t opcode);
         void InstructionFX29(uint16_t opcode);
         void InstructionFX33(uint16_t opcode);
+
+        void AdvancePC(uint16_t addressToAdvance = PC_ADVANCE_STEP);
+        uint16_t GetRegPC();
+        void StackPush(uint16_t value);
+        uint16_t StackPop();
+        void SetRegV(int index, uint8_t value);
+        uint8_t GetRegV(int index);
+        void SetRegI(uint16_t value);
+        uint16_t GetRegI();
+        void SetFlag(bool value);
     };
 }
 
