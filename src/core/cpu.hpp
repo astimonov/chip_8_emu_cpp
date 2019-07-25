@@ -72,6 +72,19 @@ namespace emulator {
         void SetRegI(uint16_t value);
         uint16_t GetRegI();
         void SetFlag(bool value);
+
+        static constexpr uint8_t ExtractX(uint32_t value) {
+            return ((value & 0x0F00) >> 8);
+        }
+        static constexpr uint8_t ExtractY(uint32_t value) {
+            return ((value & 0x00F0) >> 4);
+        }
+        static constexpr uint8_t ExtractNN(uint32_t value) {
+            return (value & 0x00FF);
+        }
+        static constexpr uint16_t ExtractNNN(uint32_t value) {
+            return (value & 0x0FFF);
+        }
     };
 }
 

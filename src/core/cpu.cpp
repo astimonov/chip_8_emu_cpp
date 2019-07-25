@@ -80,8 +80,6 @@ void Cpu::Decode(uint16_t opcode) {
     } else {
         throw IllegalInstruction(this->m_reg_pc, opcode);
     }
-
-    this->m_reg_pc += 2;
 }
 
 void Cpu::Instruction0NNN(uint16_t opcode) {
@@ -99,19 +97,19 @@ void Cpu::Instruction00EE(uint16_t opcode) {
 }
 
 void Cpu::Instruction1NNN(uint16_t opcode) {
-    uint16_t new_pc = opcode & 0x0FFF;
+    uint16_t new_pc = Cpu::ExtractNNN(opcode);
     this->SetRegPC(new_pc);
 }
 
 void Cpu::Instruction2NNN(uint16_t opcode) {
     this->StackPush(this->GetRegPC());
-    uint16_t new_pc = opcode & 0x0FFF;
+    uint16_t new_pc = Cpu::ExtractNNN(opcode);
     this->SetRegPC(new_pc);
 }
 
 void Cpu::Instruction3XNN(uint16_t opcode) {
-    uint16_t value = opcode & 0x00FF;
-    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t value = Cpu::ExtractNN(opcode);
+    uint16_t regX = Cpu::ExtractX(opcode);
     if (value == this->GetRegV(regX)) {
         this->AdvancePC(4);
     } else {
@@ -120,8 +118,8 @@ void Cpu::Instruction3XNN(uint16_t opcode) {
 }
 
 void Cpu::Instruction4XNN(uint16_t opcode) {
-    int16_t value = opcode & 0x00FF;
-    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t value = Cpu::ExtractNN(opcode);
+    uint16_t regX = Cpu::ExtractX(opcode);
     if (value != this->GetRegV(regX)) {
         this->AdvancePC(4);
     } else {
@@ -130,8 +128,8 @@ void Cpu::Instruction4XNN(uint16_t opcode) {
 }
 
 void Cpu::Instruction5XY0(uint16_t opcode) {
-    uint16_t regX = (opcode & 0x0F00) >> 8;
-    uint16_t regY = (opcode & 0x00F0) >> 4;
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t regY = Cpu::ExtractY(opcode);
     if (this->GetRegV(regX) == this->GetRegV(regY)) {
         this->AdvancePC(4);
     } else {
@@ -140,88 +138,88 @@ void Cpu::Instruction5XY0(uint16_t opcode) {
 }
 
 void Cpu::Instruction6XNN(uint16_t opcode) {
-    uint16_t value = opcode & 0x00FF;
-    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t value = Cpu::ExtractNN(opcode);
+    uint16_t regX = Cpu::ExtractX(opcode);
     this->SetRegV(regX, value);
     this->AdvancePC();
 }
 
 void Cpu::Instruction7XNN(uint16_t opcode) {
-    uint16_t value = opcode & 0x00FF;
-    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t value = Cpu::ExtractNN(opcode);
+    uint16_t regX = Cpu::ExtractX(opcode);
     this->SetRegV(regX, this->GetRegV(regX) + value);
     this->AdvancePC();
 }
 
 void Cpu::Instruction8XY0(uint16_t opcode) {
-    uint16_t regX = (opcode & 0x0F00) >> 8;
-    uint16_t regY = (opcode & 0x00F0) >> 4;
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t regY = Cpu::ExtractY(opcode);
     this->SetRegV(regX, this->GetRegV(regY));
     this->AdvancePC();
 }
 
 void Cpu::Instruction8XY1(uint16_t opcode) {
-    uint16_t regX = (opcode & 0x0F00) >> 8;
-    uint16_t regY = (opcode & 0x00F0) >> 4;
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t regY = Cpu::ExtractY(opcode);
     this->SetRegV(regX, this->GetRegV(regX) | this->GetRegV(regY));
     this->AdvancePC();
 }
 
 void Cpu::Instruction8XY2(uint16_t opcode) {
-    uint16_t regX = (opcode & 0x0F00) >> 8;
-    uint16_t regY = (opcode & 0x00F0) >> 4;
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t regY = Cpu::ExtractY(opcode);
     this->SetRegV(regX, this->GetRegV(regX) & this->GetRegV(regY));
     this->AdvancePC();
 }
 
 void Cpu::Instruction8XY3(uint16_t opcode) {
-    uint16_t regX = (opcode & 0x0F00) >> 8;
-    uint16_t regY = (opcode & 0x00F0) >> 4;
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t regY = Cpu::ExtractY(opcode);
     this->SetRegV(regX, this->GetRegV(regX) ^ this->GetRegV(regY));
     this->AdvancePC();
 }
 
 void Cpu::Instruction8XY4(uint16_t opcode) {
-    uint16_t regX = (opcode & 0x0F00) >> 8;
-    uint16_t regY = (opcode & 0x00F0) >> 4;
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t regY = Cpu::ExtractY(opcode);
     this->SetRegV(regX, this->GetRegV(regX) + this->GetRegV(regY));
     this->SetFlag(this->GetRegV(regX) < this->GetRegV(regY));
     this->AdvancePC();
 }
 
 void Cpu::Instruction8XY5(uint16_t opcode) {
-    uint16_t regX = (opcode & 0x0F00) >> 8;
-    uint16_t regY = (opcode & 0x00F0) >> 4;
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t regY = Cpu::ExtractY(opcode);
     this->SetFlag(this->GetRegV(regY) > this->GetRegV(regX));
     this->SetRegV(regX, this->GetRegV(regX) - this->GetRegV(regY));
     this->AdvancePC();
 }
 
 void Cpu::Instruction8XY6(uint16_t opcode) {
-    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t regX = Cpu::ExtractX(opcode);
     this->SetFlag(this->GetRegV(regX) & 0x0001);
     this->SetRegV(regX, this->GetRegV(regX) >> 1);
     this->AdvancePC();
 }
 
 void Cpu::Instruction8XY7(uint16_t opcode) {
-    uint16_t regX = (opcode & 0x0F00) >> 8;
-    uint16_t regY = (opcode & 0x00F0) >> 4;
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t regY = Cpu::ExtractY(opcode);
     this->SetFlag(this->GetRegV(regX) > this->GetRegV(regY));
     this->SetRegV(regX, this->GetRegV(regY) - this->GetRegV(regX));
     this->AdvancePC();
 }
 
 void Cpu::Instruction8XYE(uint16_t opcode) {
-    uint16_t regX = (opcode & 0x0F00) >> 8;
+    uint16_t regX = Cpu::ExtractX(opcode);
     this->SetFlag(this->GetRegV(regX) & 0x8000);
     this->SetRegV(regX, this->GetRegV(regX) << 1);
     this->AdvancePC();
 }
 
 void Cpu::Instruction9XY0(uint16_t opcode) {
-    uint16_t regX = (opcode & 0x0F00) >> 8;
-    uint16_t regY = (opcode & 0x00F0) >> 4;
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t regY = Cpu::ExtractY(opcode);
     if (this->GetRegV(regX) != this->GetRegV(regY)) {
         this->AdvancePC(4);
     } else {
@@ -230,13 +228,13 @@ void Cpu::Instruction9XY0(uint16_t opcode) {
 }
 
 void Cpu::InstructionANNN(uint16_t opcode) {
-    uint16_t value = opcode & 0x0FFF;
+    uint16_t value = Cpu::ExtractNNN(opcode);
     this->SetRegI(value);
     this->AdvancePC();
 }
 
 void Cpu::InstructionBNNN(uint16_t opcode) {
-    uint16_t value = opcode & 0x0FFF;
+    uint16_t value = Cpu::ExtractNNN(opcode);
     this->SetRegPC(this->GetRegV(0) + value);
 }
 
