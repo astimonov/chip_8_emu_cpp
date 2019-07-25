@@ -1,10 +1,10 @@
 #include <fstream>
 
-#include "rom.hpp"
+#include "binary_rom.hpp"
 
 using namespace emulator;
 
-Rom::Rom(std::string filename) {
+BinaryRom::BinaryRom(std::string filename) {
     std::ifstream file(filename, std::ios::binary);
     file.unsetf(std::ios::skipws);
 
@@ -20,6 +20,6 @@ Rom::Rom(std::string filename) {
     this->m_data = rom_data;
 }
 
-std::vector<uint8_t> Rom::GetData() {
+std::vector<uint8_t> BinaryRom::GetData() {
     return this->m_data;
 }
