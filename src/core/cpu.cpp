@@ -64,6 +64,8 @@ void Cpu::Decode(uint16_t opcode) {
         { 0xF01E, [this] (uint16_t opcode) { this->InstructionFX1E(opcode); } },
         { 0xF029, [this] (uint16_t opcode) { this->InstructionFX29(opcode); } },
         { 0xF033, [this] (uint16_t opcode) { this->InstructionFX33(opcode); } },
+        { 0xF033, [this] (uint16_t opcode) { this->InstructionFX55(opcode); } },
+        { 0xF033, [this] (uint16_t opcode) { this->InstructionFX65(opcode); } },
     };
 
     uint16_t opcode_xxxx = opcode;
@@ -294,6 +296,27 @@ void Cpu::InstructionFX33(uint16_t opcode) {
     this->m_ram->Write8(address + 0, (value % 1000) / 100);
     this->m_ram->Write8(address + 1, (value % 100) / 10);
     this->m_ram->Write8(address + 2, (value % 10) / 1);
+    this->AdvancePC();
+}
+
+void Cpu::InstructionFX55(uint16_t opcode) {
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t start_address = this->GetRegI();
+
+    for (uint32_t reg_index = 0; reg_index <= regX; reg_index++) {
+        this->m_ram->Write8(start_address + reg_index, this->GetRegV(reg_index));
+    }
+    this->AdvancePC();
+}
+
+void Cpu::InstructionFX65(uint16_t opcode) {
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t start_address = this->GetRegI();
+
+    for (uint32_t reg_index = 0; reg_index <= regX; reg_index++) {
+        this->SetRegV(reg_index, this->m_ram->Read8(start_address + reg_index));
+    }
+
     this->AdvancePC();
 }
 

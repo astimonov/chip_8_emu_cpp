@@ -65,6 +65,8 @@ namespace emulator {
         void InstructionFX1E(uint16_t opcode);
         void InstructionFX29(uint16_t opcode);
         void InstructionFX33(uint16_t opcode);
+        void InstructionFX55(uint16_t opcode);
+        void InstructionFX65(uint16_t opcode);
 
         void AdvancePC(uint16_t addressToAdvance = PC_ADVANCE_STEP);
         uint16_t GetRegPC();
