@@ -288,7 +288,13 @@ void Cpu::InstructionFX29(uint16_t opcode) {
 }
 
 void Cpu::InstructionFX33(uint16_t opcode) {
-
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t address = this->GetRegI();
+    uint16_t value = this->GetRegV(regX);
+    this->m_ram->Write8(address + 0, (value % 1000) / 100);
+    this->m_ram->Write8(address + 1, (value % 100) / 10);
+    this->m_ram->Write8(address + 2, (value % 10) / 1);
+    this->AdvancePC();
 }
 
 void Cpu::AdvancePC(uint16_t addressToAdvance) {
