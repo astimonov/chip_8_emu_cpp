@@ -1,5 +1,6 @@
 #include <map>
 #include <functional>
+#include <ctime>
 
 #include "cpu.hpp"
 #include "exceptions.hpp"
@@ -7,7 +8,7 @@
 using namespace emulator;
 
 Cpu::Cpu(const std::shared_ptr<Ram>& ram) : m_ram(ram) {
-
+    this->m_random_generator.seed(time(0));
 }
 
 void Cpu::SetRegPC(uint16_t pc) {
@@ -239,7 +240,11 @@ void Cpu::InstructionBNNN(uint16_t opcode) {
 }
 
 void Cpu::InstructionCXNN(uint16_t opcode) {
-
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t value = Cpu::ExtractNN(opcode);
+    uint8_t random_number = this->m_uniform_distribution(this->m_random_generator);
+    this->SetRegV(regX, value & random_number);
+    this->AdvancePC();
 }
 
 void Cpu::InstructionDXYN(uint16_t opcode) {

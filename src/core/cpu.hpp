@@ -5,6 +5,7 @@
 #include <array>
 #include <stack>
 #include <memory>
+#include <random>
 
 #include "ram.hpp"
 
@@ -26,6 +27,8 @@ namespace emulator {
         std::stack<uint16_t> m_stack;
         uint16_t m_reg_i;
         uint16_t m_reg_pc;
+        std::mt19937 m_random_generator;
+        std::uniform_int_distribution<uint8_t> m_uniform_distribution;
 
         const std::shared_ptr<Ram>& m_ram;
 
