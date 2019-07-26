@@ -276,7 +276,11 @@ void Cpu::InstructionFX18(uint16_t opcode) {
 }
 
 void Cpu::InstructionFX1E(uint16_t opcode) {
-
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t new_value = this->GetRegI() + this->GetRegV((regX));
+    this->SetRegI(new_value & 0xFFF);
+    this->SetFlag(new_value > 0xFFF);
+    this->AdvancePC();
 }
 
 void Cpu::InstructionFX29(uint16_t opcode) {
