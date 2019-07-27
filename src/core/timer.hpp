@@ -14,7 +14,7 @@ namespace emulator {
     private:
         void DecreaseValue();
         uint8_t m_value = 0;
-        uint8_t m_divider;
+        uint32_t m_divider;
         uint32_t m_counter;
     };
 }
