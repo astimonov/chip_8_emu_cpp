@@ -24,6 +24,7 @@ namespace emulator {
         static constexpr uint8_t AUX_REGISTER_RESET_VALUE = 0x00;
         static constexpr uint16_t PC_ADVANCE_STEP = 2;
         static constexpr uint16_t FONTSET_BA = 0x0000;
+        static constexpr uint16_t FONTSET_SPRITE_SIZE = 0x5;
         std::array<uint8_t, GP_REGISTERS_QTY> m_reg_v;
         std::stack<uint16_t> m_stack;
         uint16_t m_reg_i;

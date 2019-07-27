@@ -293,7 +293,10 @@ void Cpu::InstructionFX1E(uint16_t opcode) {
 }
 
 void Cpu::InstructionFX29(uint16_t opcode) {
-
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t sprite_address = Cpu::FONTSET_BA + this->GetRegV((regX)) * Cpu::FONTSET_SPRITE_SIZE;
+    this->SetRegI(sprite_address);
+    this->AdvancePC();
 }
 
 void Cpu::InstructionFX33(uint16_t opcode) {
