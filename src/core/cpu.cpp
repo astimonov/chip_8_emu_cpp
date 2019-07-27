@@ -250,31 +250,38 @@ void Cpu::InstructionCXNN(uint16_t opcode) {
 }
 
 void Cpu::InstructionDXYN(uint16_t opcode) {
-
+    // TODO
+    this->AdvancePC();
 }
 
 void Cpu::InstructionEX9E(uint16_t opcode) {
-
+    // TODO
+    this->AdvancePC();
 }
 
 void Cpu::InstructionEXA1(uint16_t opcode) {
-
+    // TODO
+    this->AdvancePC();
 }
 
 void Cpu::InstructionFX07(uint16_t opcode) {
-
+    // TODO
+    this->AdvancePC();
 }
 
 void Cpu::InstructionFX0A(uint16_t opcode) {
-
+    // TODO
+    this->AdvancePC();
 }
 
 void Cpu::InstructionFX15(uint16_t opcode) {
-
+    // TODO
+    this->AdvancePC();
 }
 
 void Cpu::InstructionFX18(uint16_t opcode) {
-
+    // TODO
+    this->AdvancePC();
 }
 
 void Cpu::InstructionFX1E(uint16_t opcode) {
@@ -306,6 +313,7 @@ void Cpu::InstructionFX55(uint16_t opcode) {
     for (uint32_t reg_index = 0; reg_index <= regX; reg_index++) {
         this->m_ram->Write8(start_address + reg_index, this->GetRegV(reg_index));
     }
+
     this->AdvancePC();
 }
 
