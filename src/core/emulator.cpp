@@ -14,7 +14,8 @@ Emulator::Emulator(std::shared_ptr<IRom> rom,
     this->m_ram = std::make_shared<Ram>();
     this->m_cpu = std::make_unique<Cpu>(this->m_ram);
     this->m_ram->WriteMultiple(this->m_fontset.begin(), this->m_fontset.end(), Emulator::FONTSET_BA);
-    this->m_ram->WriteMultiple(this->m_rom->GetData().begin(), this->m_rom->GetData().end(), Emulator::PC_START);
+    auto data = this->m_rom->GetData();
+    this->m_ram->WriteMultiple(data.begin(), data.end(), Emulator::PC_START);
     this->m_cpu->Reset();
     this->m_cpu->SetRegPC(PC_START);
 }

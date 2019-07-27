@@ -1,4 +1,5 @@
 #include "ram.hpp"
+#include "exceptions.hpp"
 
 using namespace emulator;
 
@@ -12,7 +13,7 @@ void Ram::Reset() {
 
 uint8_t Ram::Read8(uint16_t address) {
     if (address >= RAM_SIZE_BYTES) {
-        throw std::out_of_range("Too high address");
+        throw LoadAccessFailed(0x0000, address);
     }
 
     return this->m_memory[address];
@@ -20,7 +21,7 @@ uint8_t Ram::Read8(uint16_t address) {
 
 void Ram::Write8(uint16_t address, uint8_t value) {
     if (address >= RAM_SIZE_BYTES) {
-        throw std::out_of_range("Too high address");
+        throw StoreAccessFailed(0x0000, address);
     }
 
     this->m_memory[address] = value;
@@ -28,7 +29,7 @@ void Ram::Write8(uint16_t address, uint8_t value) {
 
 uint16_t Ram::Read16(uint16_t address) {
     if (address >= RAM_SIZE_BYTES - 1) {
-        throw std::out_of_range("Too high address");
+        throw LoadAccessFailed(0x0000, address);
     }
 
     return this->m_memory[address] << 8 | this->m_memory[address + 1];
