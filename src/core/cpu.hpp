@@ -8,11 +8,14 @@
 #include <random>
 
 #include "ram.hpp"
+#include "timer.hpp"
 
 namespace emulator {
     class Cpu {
     public:
-        explicit Cpu(const std::shared_ptr<Ram>& ram);
+        explicit Cpu(const std::shared_ptr<Ram>& ram,
+                std::shared_ptr<Timer> delay_timer,
+                std::shared_ptr<Timer> sound_timer);
         void SetRegPC(uint16_t pc);
         void Reset();
         void RunInstruction();
@@ -33,6 +36,8 @@ namespace emulator {
         std::uniform_int_distribution<uint8_t> m_uniform_distribution;
 
         const std::shared_ptr<Ram>& m_ram;
+        std::shared_ptr<Timer> m_delay_timer;
+        std::shared_ptr<Timer> m_sound_timer;
 
         void Instruction0NNN(uint16_t opcode);
         void Instruction00E0(uint16_t opcode);

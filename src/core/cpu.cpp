@@ -7,7 +7,10 @@
 
 using namespace emulator;
 
-Cpu::Cpu(const std::shared_ptr<Ram>& ram) : m_ram(ram) {
+Cpu::Cpu(const std::shared_ptr<Ram>& ram,
+         std::shared_ptr<Timer> delay_timer,
+         std::shared_ptr<Timer> sound_timer)
+         : m_ram(ram), m_delay_timer(delay_timer), m_sound_timer(sound_timer) {
     this->m_random_generator.seed(time(0));
 }
 
@@ -23,6 +26,9 @@ void Cpu::Reset() {
     if (!this->m_stack.empty()) {
         this->m_stack = {};
     }
+
+    this->m_delay_timer->Reset();
+    this->m_sound_timer->Reset();
 }
 
 void Cpu::RunInstruction() {
@@ -265,7 +271,8 @@ void Cpu::InstructionEXA1(uint16_t opcode) {
 }
 
 void Cpu::InstructionFX07(uint16_t opcode) {
-    // TODO
+    uint16_t regX = Cpu::ExtractX(opcode);
+    this->SetRegV(regX, this->m_delay_timer->GetValue());
     this->AdvancePC();
 }
 
@@ -275,12 +282,14 @@ void Cpu::InstructionFX0A(uint16_t opcode) {
 }
 
 void Cpu::InstructionFX15(uint16_t opcode) {
-    // TODO
+    uint16_t regX = Cpu::ExtractX(opcode);
+    this->m_delay_timer->SetValue(this->GetRegV(regX));
     this->AdvancePC();
 }
 
 void Cpu::InstructionFX18(uint16_t opcode) {
-    // TODO
+    uint16_t regX = Cpu::ExtractX(opcode);
+    this->m_sound_timer->SetValue(this->GetRegV(regX));
     this->AdvancePC();
 }
 

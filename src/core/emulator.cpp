@@ -12,10 +12,12 @@ Emulator::Emulator(std::shared_ptr<IRom> rom,
                    std::shared_ptr<IInput> input)
                         : m_rom(rom), m_graphics(graphics), m_sound(sound), m_input(input) {
     this->m_ram = std::make_shared<Ram>();
-    this->m_cpu = std::make_unique<Cpu>(this->m_ram);
     this->m_ram->WriteMultiple(this->m_fontset.begin(), this->m_fontset.end(), Emulator::FONTSET_BA);
     auto data = this->m_rom->GetData();
     this->m_ram->WriteMultiple(data.begin(), data.end(), Emulator::PC_START);
+    this->m_delay_timer = std::make_shared<Timer>(CPU_FREQUENCY, DELAY_TIMER_FREQUENCY);
+    this->m_sound_timer = std::make_shared<Timer>(CPU_FREQUENCY, SOUND_TIMER_FREQUENCY);
+    this->m_cpu = std::make_unique<Cpu>(this->m_ram, m_delay_timer, m_sound_timer);
     this->m_cpu->Reset();
     this->m_cpu->SetRegPC(PC_START);
 }
@@ -23,6 +25,8 @@ Emulator::Emulator(std::shared_ptr<IRom> rom,
 void Emulator::Run() {
     while (true) {
         this->m_cpu->RunInstruction();
+        this->m_delay_timer->Update();
+        this->m_sound_timer->Update();
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 }

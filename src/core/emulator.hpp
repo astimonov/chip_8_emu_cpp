@@ -24,12 +24,17 @@ namespace emulator {
         static constexpr uint16_t PC_START = 0x0200;
         static constexpr uint16_t FONTSET_BA = 0x0000;
         static constexpr uint16_t FONTSET_SIZE = 80;
+        static constexpr uint16_t CPU_FREQUENCY = 840;
+        static constexpr uint32_t DELAY_TIMER_FREQUENCY = 60;
+        static constexpr uint32_t SOUND_TIMER_FREQUENCY = 60;
         std::unique_ptr<Cpu> m_cpu;
         std::shared_ptr<Ram> m_ram;
         std::shared_ptr<IRom> m_rom;
         std::shared_ptr<IGraphics> m_graphics;
         std::shared_ptr<ISound> m_sound;
         std::shared_ptr<IInput> m_input;
+        std::shared_ptr<Timer> m_delay_timer;
+        std::shared_ptr<Timer> m_sound_timer;
         static const std::array<uint8_t, FONTSET_SIZE> m_fontset;
     };
 }
