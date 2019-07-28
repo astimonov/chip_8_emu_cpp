@@ -5,6 +5,8 @@ namespace emulator {
     class ISound {
     public:
         virtual ~ISound() = default;
+        virtual void PlaySound() = 0;
+        virtual void PauseSound() = 0;
     };
 }
 

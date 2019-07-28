@@ -7,7 +7,12 @@ namespace emulator {
     class SDL2Sound : public ISound {
     public:
         SDL2Sound();
+        ~SDL2Sound();
+        void PlaySound();
+        void PauseSound();
     private:
+        static void SoundCallback (void *userdata, Uint8 *stream, int len);
+        SDL_AudioDeviceID m_audio_device = 0;
     };
 }
 

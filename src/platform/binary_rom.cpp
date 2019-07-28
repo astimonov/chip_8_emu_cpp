@@ -1,4 +1,5 @@
 #include <fstream>
+#include <exception>
 
 #include "binary_rom.hpp"
 
@@ -7,6 +8,10 @@ using namespace emulator;
 BinaryRom::BinaryRom(std::string filename) {
     std::ifstream file(filename, std::ios::binary);
     file.unsetf(std::ios::skipws);
+
+    if (!file.good()) {
+        throw std::runtime_error("Could not open ROM file");
+    }
 
     file.seekg(0, std::ios::end);
     std::vector<uint8_t> rom_data;

@@ -21,6 +21,8 @@ int main(int argc, char ** argv) {
         return 1;
     };
 
+    int result = 1;
+
     try {
         auto rom = std::make_shared<BinaryRom>(std::string(ROM_FILENAME));
         auto graphics = std::make_shared<SDL2Graphics>();
@@ -43,6 +45,8 @@ int main(int argc, char ** argv) {
 
             SDL_Delay(1);
         }
+
+        result = 0;
     } catch (IllegalInstruction &e) {
         std::cout << e.what()
                   << " PC = 0x" << std::hex << e.GetPC()
@@ -72,5 +76,5 @@ int main(int argc, char ** argv) {
 
     SDL_Quit();
 
-    return 0;
+    return result;
 }

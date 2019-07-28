@@ -30,8 +30,12 @@ void Emulator::RunCycle() {
     this->m_cpu->RunInstruction();
     this->m_delay_timer->Update();
     this->m_sound_timer->Update();
-    //std::this_thread::sleep_for(std::chrono::microseconds(1000000 / Emulator::CPU_FREQUENCY));
     this->m_graphics->Draw();
+    if (this->m_sound_timer->GetValue() > 0) {
+        this->m_sound->PlaySound();
+    } else {
+        this->m_sound->PauseSound();
+    }
 }
 
 const std::array<uint8_t, Emulator::FONTSET_SIZE> Emulator::m_fontset {
