@@ -9,6 +9,7 @@ namespace emulator {
     class KeyboardInput : public IInput {
     public:
         KeyboardInput();
+        void Scan();
         bool IsKeyPressed(uint32_t key);
     private:
         std::array<bool, IInput::KEYS_QTY> m_keys;

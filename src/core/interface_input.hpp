@@ -8,6 +8,7 @@ namespace emulator {
     public:
         static constexpr uint32_t KEYS_QTY = 16;
         virtual ~IInput() = default;
+        virtual void Scan() = 0;
         virtual bool IsKeyPressed(uint32_t key) = 0;
     };
 }

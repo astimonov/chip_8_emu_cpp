@@ -13,3 +13,7 @@ KeyboardInput::KeyboardInput() {
 bool KeyboardInput::IsKeyPressed(uint32_t key) {
     return this->m_keys[key];
 }
+
+void KeyboardInput::Scan() {
+
+}
