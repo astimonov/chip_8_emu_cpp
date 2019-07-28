@@ -9,13 +9,17 @@
 
 #include "ram.hpp"
 #include "timer.hpp"
+#include "interface_graphics.hpp"
+#include "interface_input.hpp"
 
 namespace emulator {
     class Cpu {
     public:
-        explicit Cpu(const std::shared_ptr<Ram>& ram,
-                std::shared_ptr<Timer> delay_timer,
-                std::shared_ptr<Timer> sound_timer);
+        explicit Cpu(const std::shared_ptr<Ram> &ram,
+                     std::shared_ptr<Timer> delay_timer,
+                     std::shared_ptr<Timer> sound_timer,
+                     std::shared_ptr<IGraphics> graphics,
+                     std::shared_ptr<IInput> input);
         void SetRegPC(uint16_t pc);
         void Reset();
         void RunInstruction();
@@ -38,6 +42,8 @@ namespace emulator {
         const std::shared_ptr<Ram>& m_ram;
         std::shared_ptr<Timer> m_delay_timer;
         std::shared_ptr<Timer> m_sound_timer;
+        std::shared_ptr<IGraphics> m_graphics;
+        std::shared_ptr<IInput> m_input;
 
         void Instruction0NNN(uint16_t opcode);
         void Instruction00E0(uint16_t opcode);

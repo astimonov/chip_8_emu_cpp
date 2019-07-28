@@ -9,9 +9,13 @@ using namespace emulator;
 
 Cpu::Cpu(const std::shared_ptr<Ram>& ram,
          std::shared_ptr<Timer> delay_timer,
-         std::shared_ptr<Timer> sound_timer)
-         : m_ram(ram), m_delay_timer(delay_timer), m_sound_timer(sound_timer) {
+         std::shared_ptr<Timer> sound_timer,
+         std::shared_ptr<IGraphics> graphics,
+         std::shared_ptr<IInput> input)
+         : m_ram(ram), m_delay_timer(delay_timer), m_sound_timer(sound_timer),
+            m_graphics(graphics), m_input(input) {
     this->m_random_generator.seed(time(0));
+    this->Reset();
 }
 
 void Cpu::SetRegPC(uint16_t pc) {
@@ -97,7 +101,7 @@ void Cpu::Instruction0NNN(uint16_t opcode) {
 }
 
 void Cpu::Instruction00E0(uint16_t opcode) {
-    // Clear the screen
+    this->m_graphics->Reset();
     this->AdvancePC();
 }
 
@@ -261,13 +265,29 @@ void Cpu::InstructionDXYN(uint16_t opcode) {
 }
 
 void Cpu::InstructionEX9E(uint16_t opcode) {
-    // TODO
-    this->AdvancePC();
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint8_t key = this->GetRegV(regX);
+    if (key >= IInput::KEYS_QTY) {
+        throw IllegalInstruction(this->GetRegPC(), opcode);
+    }
+    if (this->m_input->IsKeyPressed(key)) {
+        this->AdvancePC(4);
+    } else {
+        this->AdvancePC();
+    }
 }
 
 void Cpu::InstructionEXA1(uint16_t opcode) {
-    // TODO
-    this->AdvancePC();
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint8_t key = this->GetRegV(regX);
+    if (key >= IInput::KEYS_QTY) {
+        throw IllegalInstruction(this->GetRegPC(), opcode);
+    }
+    if (!this->m_input->IsKeyPressed(key)) {
+        this->AdvancePC(4);
+    } else {
+        this->AdvancePC();
+    }
 }
 
 void Cpu::InstructionFX07(uint16_t opcode) {
@@ -277,8 +297,14 @@ void Cpu::InstructionFX07(uint16_t opcode) {
 }
 
 void Cpu::InstructionFX0A(uint16_t opcode) {
-    // TODO
-    this->AdvancePC();
+    uint16_t regX = Cpu::ExtractX(opcode);
+
+    for (uint32_t key = 0; key < IInput::KEYS_QTY; key++) {
+        if (this->m_input->IsKeyPressed(key)) {
+            this->SetRegV(regX, key);
+            this->AdvancePC();
+        }
+    }
 }
 
 void Cpu::InstructionFX15(uint16_t opcode) {
@@ -349,7 +375,7 @@ uint16_t Cpu::GetRegPC() {
 }
 
 void Cpu::StackPush(uint16_t value) {
-    if (this->m_stack.size() >= this->STACK_DEPTH) {
+    if (this->m_stack.size() >= Cpu::STACK_DEPTH) {
         throw StackOverflow(this->GetRegPC());
     }
 
