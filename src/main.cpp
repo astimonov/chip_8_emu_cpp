@@ -16,6 +16,8 @@ using namespace emulator;
 static constexpr std::string_view ROM_FILENAME{"../roms/INVADERS"};
 
 int main(int argc, char ** argv) {
+    std::string rom_filename = (argc > 1) ? argv[1] : std::string(ROM_FILENAME);
+
     SDL_SetMainReady();
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
         return 1;
@@ -24,7 +26,7 @@ int main(int argc, char ** argv) {
     int result = 1;
 
     try {
-        auto rom = std::make_shared<BinaryRom>(std::string(ROM_FILENAME));
+        auto rom = std::make_shared<BinaryRom>(rom_filename);
         auto graphics = std::make_shared<SDL2Graphics>();
         auto sound = std::make_shared<SDL2Sound>();
         auto input = std::make_shared<KeyboardInput>();
