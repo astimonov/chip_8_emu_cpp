@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
+
 #include "core/emulator.hpp"
 #include "core/exceptions.hpp"
 #include "platform/binary_rom.hpp"
@@ -12,7 +15,12 @@ using namespace emulator;
 
 static constexpr std::string_view ROM_FILENAME{"../roms/INVADERS"};
 
-int main() {
+int main(int argc, char ** argv) {
+    SDL_SetMainReady();
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
+        return 1;
+    };
+
     try {
         auto rom = std::make_shared<BinaryRom>(std::string(ROM_FILENAME));
         auto graphics = std::make_shared<SDL2Graphics>();
@@ -20,7 +28,21 @@ int main() {
         auto input = std::make_shared<KeyboardInput>();
 
         Emulator emulator_instance{rom, graphics, sound, input};
-        emulator_instance.Run();
+
+        SDL_Event e;
+        bool stop = false;
+
+        while (!stop) {
+            emulator_instance.RunCycle();
+
+            if (SDL_PollEvent(&e)) {
+                if (e.type == SDL_QUIT) {
+                    stop = true;
+                }
+            }
+
+            SDL_Delay(1);
+        }
     } catch (IllegalInstruction &e) {
         std::cout << e.what()
                   << " PC = 0x" << std::hex << e.GetPC()
@@ -44,7 +66,11 @@ int main() {
         std::cout << e.what()
                   << " PC = 0x" << std::hex << e.GetPC()
                   << '\n';
+    } catch (std::runtime_error &e) {
+        std::cout << e.what();
     }
+
+    SDL_Quit();
 
     return 0;
 }
