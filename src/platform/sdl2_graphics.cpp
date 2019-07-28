@@ -33,7 +33,7 @@ SDL2Graphics::SDL2Graphics() {
         throw std::runtime_error("Could not create texture");
     }
 
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
 }
 
 SDL2Graphics::~SDL2Graphics() {
