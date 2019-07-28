@@ -4,6 +4,12 @@
 
 #include "keyboard_input.hpp"
 
-emulator::KeyboardInput::KeyboardInput() {
+using namespace emulator;
 
+KeyboardInput::KeyboardInput() {
+    this->m_keys = {};
+}
+
+bool KeyboardInput::IsKeyPressed(uint32_t key) {
+    return this->m_keys[key];
 }
