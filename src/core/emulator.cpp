@@ -1,6 +1,8 @@
 #include <thread>
 #include <chrono>
 #include <array>
+#include <chrono>
+#include <iostream>
 
 #include "emulator.hpp"
 
@@ -23,15 +25,13 @@ Emulator::Emulator(std::shared_ptr<IRom> rom,
     this->m_cpu->SetRegPC(PC_START);
 }
 
-void Emulator::Run() {
-    while (true) {
-        this->m_input->Scan();
-        this->m_cpu->RunInstruction();
-        this->m_delay_timer->Update();
-        this->m_sound_timer->Update();
-        std::this_thread::sleep_for(std::chrono::microseconds(1000000 / Emulator::CPU_FREQUENCY));
-        this->m_graphics->Draw();
-    }
+void Emulator::RunCycle() {
+    this->m_input->Scan();
+    this->m_cpu->RunInstruction();
+    this->m_delay_timer->Update();
+    this->m_sound_timer->Update();
+    //std::this_thread::sleep_for(std::chrono::microseconds(1000000 / Emulator::CPU_FREQUENCY));
+    this->m_graphics->Draw();
 }
 
 const std::array<uint8_t, Emulator::FONTSET_SIZE> Emulator::m_fontset {

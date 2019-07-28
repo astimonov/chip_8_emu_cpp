@@ -19,7 +19,7 @@ namespace emulator {
                           std::shared_ptr<IGraphics> graphics,
                           std::shared_ptr<ISound> sound,
                           std::shared_ptr<IInput> input);
-        void Run();
+        void RunCycle();
     private:
         static constexpr uint16_t PC_START = 0x0200;
         static constexpr uint16_t FONTSET_BA = 0x0000;
