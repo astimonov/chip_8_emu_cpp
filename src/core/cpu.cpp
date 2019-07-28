@@ -260,7 +260,27 @@ void Cpu::InstructionCXNN(uint16_t opcode) {
 }
 
 void Cpu::InstructionDXYN(uint16_t opcode) {
-    // TODO
+    uint16_t regX = Cpu::ExtractX(opcode);
+    uint16_t regY = Cpu::ExtractY(opcode);
+    uint16_t height = Cpu::ExtractN(opcode);
+    int coordX = this->GetRegV(regX);
+    int coordY = this->GetRegV(regY);
+    bool pixels_erased = false;
+
+    for (int y = 0; y < height; y++) {
+        uint8_t new_pixel = this->m_ram->Read8(this->GetRegI() + y);
+        for (int x = 0; x < 8; x++) {
+            if (new_pixel & (1 << (7 - x))) {
+                uint32_t current_pixel = this->m_graphics->GetXY(x + coordX, y + coordY);
+                if (current_pixel) {
+                    pixels_erased = true;
+                }
+                this->m_graphics->SetXY(x + coordX, y + coordY, current_pixel ^ 1);
+            }
+        }
+    }
+
+    this->SetFlag(pixels_erased);
     this->AdvancePC();
 }
 
