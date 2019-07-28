@@ -40,7 +40,7 @@ void Cpu::RunInstruction() {
 }
 
 void Cpu::Decode(uint16_t opcode) {
-    std::map<uint16_t, const std::function<void(uint16_t)>> opcode_handlers = {
+    static std::map<uint16_t, const std::function<void(uint16_t)>> opcode_handlers = {
         { 0x0000, [this] (uint16_t opcode) { this->Instruction0NNN(opcode); } },
         { 0x00E0, [this] (uint16_t opcode) { this->Instruction00E0(opcode); } },
         { 0x00EE, [this] (uint16_t opcode) { this->Instruction00EE(opcode); } },
@@ -341,7 +341,7 @@ void Cpu::InstructionFX18(uint16_t opcode) {
 
 void Cpu::InstructionFX1E(uint16_t opcode) {
     uint16_t regX = Cpu::ExtractX(opcode);
-    uint16_t new_value = this->GetRegI() + this->GetRegV((regX));
+    uint16_t new_value = this->GetRegI() + this->GetRegV(regX);
     this->SetRegI(new_value & 0xFFF);
     this->SetFlag(new_value > 0xFFF);
     this->AdvancePC();
@@ -349,7 +349,7 @@ void Cpu::InstructionFX1E(uint16_t opcode) {
 
 void Cpu::InstructionFX29(uint16_t opcode) {
     uint16_t regX = Cpu::ExtractX(opcode);
-    uint16_t sprite_address = Cpu::FONTSET_BA + this->GetRegV((regX)) * Cpu::FONTSET_SPRITE_SIZE;
+    uint16_t sprite_address = Cpu::FONTSET_BA + this->GetRegV(regX) * Cpu::FONTSET_SPRITE_SIZE;
     this->SetRegI(sprite_address);
     this->AdvancePC();
 }
@@ -358,9 +358,9 @@ void Cpu::InstructionFX33(uint16_t opcode) {
     uint16_t regX = Cpu::ExtractX(opcode);
     uint16_t address = this->GetRegI();
     uint16_t value = this->GetRegV(regX);
-    this->m_ram->Write8(address + 0, (value % 1000) / 100);
-    this->m_ram->Write8(address + 1, (value % 100) / 10);
-    this->m_ram->Write8(address + 2, (value % 10) / 1);
+    this->m_ram->Write8(address + 0, value / 100);
+    this->m_ram->Write8(address + 1, (value / 10) % 10);
+    this->m_ram->Write8(address + 2, (value % 10));
     this->AdvancePC();
 }
 
