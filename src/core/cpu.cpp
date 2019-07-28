@@ -74,8 +74,8 @@ void Cpu::Decode(uint16_t opcode) {
         { 0xF01E, [this] (uint16_t opcode) { this->InstructionFX1E(opcode); } },
         { 0xF029, [this] (uint16_t opcode) { this->InstructionFX29(opcode); } },
         { 0xF033, [this] (uint16_t opcode) { this->InstructionFX33(opcode); } },
-        { 0xF033, [this] (uint16_t opcode) { this->InstructionFX55(opcode); } },
-        { 0xF033, [this] (uint16_t opcode) { this->InstructionFX65(opcode); } },
+        { 0xF055, [this] (uint16_t opcode) { this->InstructionFX55(opcode); } },
+        { 0xF065, [this] (uint16_t opcode) { this->InstructionFX65(opcode); } },
     };
 
     uint16_t opcode_xxxx = opcode;
