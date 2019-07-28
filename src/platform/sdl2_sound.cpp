@@ -10,11 +10,10 @@ using namespace emulator;
 void SDL2Sound::SoundCallback(void *userdata, Uint8 *stream, int len) {
     static uint32_t counter;
 
-    double pi = 3.1415;
     double Hz = 200;
     double A = 100;
     double SR = 48000;
-    double F = 2 * pi * Hz / SR;
+    double F = 2 * M_PI * Hz / SR;
 
     for (int i = 0; i < len; i++) {
         counter++;
