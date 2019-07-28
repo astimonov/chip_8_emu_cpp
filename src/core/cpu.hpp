@@ -97,6 +97,9 @@ namespace emulator {
         static constexpr uint8_t ExtractY(uint32_t value) {
             return ((value & 0x00F0) >> 4);
         }
+        static constexpr uint8_t ExtractN(uint32_t value) {
+            return (value & 0x000F);
+        }
         static constexpr uint8_t ExtractNN(uint32_t value) {
             return (value & 0x00FF);
         }
