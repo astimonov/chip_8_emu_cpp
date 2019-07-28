@@ -115,7 +115,7 @@ void Cpu::Instruction1NNN(uint16_t opcode) {
 }
 
 void Cpu::Instruction2NNN(uint16_t opcode) {
-    this->StackPush(this->GetRegPC());
+    this->StackPush(this->GetRegPC() + 2);
     uint16_t new_pc = Cpu::ExtractNNN(opcode);
     this->SetRegPC(new_pc);
 }
