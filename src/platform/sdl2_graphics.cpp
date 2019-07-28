@@ -50,7 +50,6 @@ void SDL2Graphics::Reset() {
 }
 
 void SDL2Graphics::Draw() {
-
     SDL_Rect rect;
     rect.x = 0;
     rect.y = 0;

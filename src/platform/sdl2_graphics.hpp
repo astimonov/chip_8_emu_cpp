@@ -15,8 +15,8 @@ namespace emulator {
         uint8_t GetXY(uint32_t x, uint32_t y);
         void SetXY(uint32_t x, uint32_t y, uint8_t value);
     private:
-        static constexpr uint32_t PALETTE_PIXEL_1 = 0x000080FF;
-        static constexpr uint32_t PALETTE_PIXEL_0 = 0x00003366;
+        static constexpr uint32_t PALETTE_PIXEL_1 = 0x0000B3FF;
+        static constexpr uint32_t PALETTE_PIXEL_0 = 0x0001344A;
 
         std::array<std::array<uint32_t, IGraphics::GFX_MAX_X>, IGraphics::GFX_MAX_Y> m_graphics_memory;
         SDL_Window *m_window;
