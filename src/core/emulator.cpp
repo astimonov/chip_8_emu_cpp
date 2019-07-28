@@ -17,7 +17,8 @@ Emulator::Emulator(std::shared_ptr<IRom> rom,
     this->m_ram->WriteMultiple(data.begin(), data.end(), Emulator::PC_START);
     this->m_delay_timer = std::make_shared<Timer>(CPU_FREQUENCY, DELAY_TIMER_FREQUENCY);
     this->m_sound_timer = std::make_shared<Timer>(CPU_FREQUENCY, SOUND_TIMER_FREQUENCY);
-    this->m_cpu = std::make_unique<Cpu>(this->m_ram, m_delay_timer, m_sound_timer);
+    this->m_cpu = std::make_unique<Cpu>(this->m_ram, m_delay_timer, m_sound_timer,
+                                        this->m_graphics, this->m_input);
     this->m_cpu->Reset();
     this->m_cpu->SetRegPC(PC_START);
 }
@@ -27,7 +28,8 @@ void Emulator::Run() {
         this->m_cpu->RunInstruction();
         this->m_delay_timer->Update();
         this->m_sound_timer->Update();
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::this_thread::sleep_for(std::chrono::microseconds(1000000 / Emulator::CPU_FREQUENCY));
+        this->m_graphics->Draw();
     }
 }
 
