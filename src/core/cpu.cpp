@@ -83,12 +83,12 @@ void Cpu::Decode(uint16_t opcode) {
     uint16_t opcode_x00x = opcode & 0xF00F;
     uint16_t opcode_x0xx = opcode & 0xF0FF;
 
-    auto handler = opcode_handlers.find(opcode_x0xx);
+    auto handler = opcode_handlers.find(opcode_xxxx);
 
     if ((handler != opcode_handlers.end())
+            || ((handler = opcode_handlers.find(opcode_x0xx)) != opcode_handlers.end())
             || ((handler = opcode_handlers.find(opcode_x00x)) != opcode_handlers.end())
-            || ((handler = opcode_handlers.find(opcode_x000)) != opcode_handlers.end())
-            || ((handler = opcode_handlers.find(opcode_xxxx)) != opcode_handlers.end())) {
+            || ((handler = opcode_handlers.find(opcode_x000)) != opcode_handlers.end())) {
         handler->second(opcode);
     } else {
         throw IllegalInstruction(this->m_reg_pc, opcode);
@@ -195,6 +195,7 @@ void Cpu::Instruction8XY3(uint16_t opcode) {
 void Cpu::Instruction8XY4(uint16_t opcode) {
     uint16_t regX = Cpu::ExtractX(opcode);
     uint16_t regY = Cpu::ExtractY(opcode);
+    this->SetFlag(this->GetRegV(regY) > this->GetRegV(regX));
     this->SetRegV(regX, this->GetRegV(regX) + this->GetRegV(regY));
     this->SetFlag(this->GetRegV(regX) < this->GetRegV(regY));
     this->AdvancePC();
@@ -203,7 +204,7 @@ void Cpu::Instruction8XY4(uint16_t opcode) {
 void Cpu::Instruction8XY5(uint16_t opcode) {
     uint16_t regX = Cpu::ExtractX(opcode);
     uint16_t regY = Cpu::ExtractY(opcode);
-    this->SetFlag(this->GetRegV(regY) > this->GetRegV(regX));
+    this->SetFlag(this->GetRegV(regY) <= this->GetRegV(regX));
     this->SetRegV(regX, this->GetRegV(regX) - this->GetRegV(regY));
     this->AdvancePC();
 }
@@ -218,7 +219,7 @@ void Cpu::Instruction8XY6(uint16_t opcode) {
 void Cpu::Instruction8XY7(uint16_t opcode) {
     uint16_t regX = Cpu::ExtractX(opcode);
     uint16_t regY = Cpu::ExtractY(opcode);
-    this->SetFlag(this->GetRegV(regX) > this->GetRegV(regY));
+    this->SetFlag(this->GetRegV(regX) <= this->GetRegV(regY));
     this->SetRegV(regX, this->GetRegV(regY) - this->GetRegV(regX));
     this->AdvancePC();
 }
@@ -359,7 +360,7 @@ void Cpu::InstructionFX33(uint16_t opcode) {
     uint16_t address = this->GetRegI();
     uint16_t value = this->GetRegV(regX);
     this->m_ram->Write8(address + 0, value / 100);
-    this->m_ram->Write8(address + 1, (value / 10) % 10);
+    this->m_ram->Write8(address + 1, (value % 100) / 10);
     this->m_ram->Write8(address + 2, (value % 10));
     this->AdvancePC();
 }
