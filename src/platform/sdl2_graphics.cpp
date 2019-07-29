@@ -63,9 +63,13 @@ void SDL2Graphics::Draw() {
 }
 
 uint8_t SDL2Graphics::GetXY(uint32_t x, uint32_t y) {
+    x %= IGraphics::GFX_MAX_X;
+    y %= IGraphics::GFX_MAX_Y;
     return SDL2Graphics::NormalizeColor(this->m_graphics_memory[y][x]);
 }
 
 void SDL2Graphics::SetXY(uint32_t x, uint32_t y, uint8_t value) {
+    x %= IGraphics::GFX_MAX_X;
+    y %= IGraphics::GFX_MAX_Y;
     this->m_graphics_memory[y][x] = SDL2Graphics::DenormalizeColor(value);
 }
